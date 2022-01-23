@@ -12,7 +12,6 @@ setup(
     long_description=README,
     long_description_content_type="text/markdown",
     url="https://github.com/LaGauffre/bayes-splicing",
-    download_url = 'https://github.com/LaGauffre/bayes-splicing/archive/refs/tags/v11.tar.gz',
     author="Pierre-Olivier Goffard",
     author_email="pierre.olivier.goffard@gmail.com",
     license="MIT",
