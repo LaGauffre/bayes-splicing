@@ -1,12 +1,3 @@
-# _bayes-splicing_ Python package for Bayesian inference of splicing distributions
-
-This package implements an efficient Sequential Monte Carlo Sampling (SMC) algorithm. Splicing models, also called composite models, are fitted to the data and compared using Bayesian statistics tools
-
-This package is the result of my paper "[Sequential Monte Carlo Sampler to fit and compare insurance loss models](https://hal.archives-ouvertes.fr/hal-03263471v1)". To install simply run `pip install bayes-splicing`.
-
-For example, imagine we have a sample of insurance losses and we would like to fit a composite model based on the exponential and Pareto distributions. 
-
-```python
 import bayes_splicing as bs
 import pandas as pd
 import numpy as np
@@ -42,4 +33,28 @@ bs.trace_plots(f, trace)
 # The quantile-quantile plot
 f.set_ppf()
 bs.qq_plot(X, f, trace.mean().values)
-```
+
+# Computation of the pure premium and the XOL premium with priority P and limit L
+
+f.set_pdf()
+# Based on the mean a posteriori
+parms = trace.mean().values 
+f.PP(parms)
+P, L = 2, 6
+f.XOLP( parms, P, L)
+
+# Based on the whole posterior sample
+pps = [f.PP(parms) for parms in trace.values]
+xolps = [f.XOLP(parms, P, L) for parms in trace.values]
+np.mean(pps), np.mean(xolps)
+
+# Based on the mean a posteriori
+parms = trace.mean().values 
+expo, premiums, safety_loadings, n_sim = 100, np.array([f.PP(parms), f.XOLP(parms, P, L)]), [0.05, 0.05], 1e5
+pnls = f.PnL(parms, P, L, expo, premiums, safety_loadings, n_sim)
+np.quantile(pnls, 0.005), np.mean(pnls)
+
+# Based on the whole posterior sample
+expo, premiums, safety_loadings, n_sim = 100, np.array([np.mean(pps), np.mean(xolps)]), [0.05, 0.05], 1e5
+pnls = [f.PnL(parms, P, L, expo, premiums) for parms in trace.sample(int(n_sim), replace = True).values]
+np.quantile(pnls, 0.005), np.mean(pnls)
