@@ -974,6 +974,12 @@ class loss_model:
         elif self.name == "Inverse-Weibull":
             k, β = parms
             return(  st.invweibull(k).rvs(size = n) * β )
+        elif self.name == "Weibull":
+            k, β = parms
+            return(  st.weibull_min(k).rvs(size = n) * β )
+        if self.name == "Lomax":
+            α, σ = parms
+            return(st.lomax(α).rvs(size = n) * σ)
         
     
     def set_cdf(self):
@@ -1220,6 +1226,32 @@ class loss_model:
         
         
         self.ppf = ppf
+        
+    def PP(self, parms):
+        return(sc.integrate.quad(lambda x: x*self.pdf(parms, x), 0, np.inf)[0])
+    
+    def XOLP(self, parms, P, L):
+        return(sc.integrate.quad(lambda x: min(x - P, L) * self.pdf(parms, x), P, np.inf)[0])
+    
+    def PnL(self, parms, P, L, expo, premiums, safety_loadings = [0.05, 0.05], n_sim = 1):
+        π, π2 = premiums
+        π1 = (1 + safety_loadings[0]) * π - (1 + safety_loadings[1]) * π2
+        PnLs = []
+        for k in range(int(n_sim)):
+            N = np.random.poisson(expo, 1)
+            X = self.sample(parms, N)
+            S = np.sum(X)
+            if L == np.inf:
+                R = np.sum(X[X > P] - P) 
+            else:
+                R = np.sum(X[np.logical_and(X > P, X - P < L)] - P) + \
+                    np.sum(np.logical_and(X > P, X - P > L)) * L
+            D = S - R
+            PnLs.append(π1 * expo - D)
+        return(PnLs)
+    
+
+
     
 
         

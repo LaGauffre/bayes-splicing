@@ -1,4 +1,4 @@
-__version__ = "0.0.0"
+__version__ = "0.0.1"
 
 from .prior_distribution import *
 from .independent_priors import *
