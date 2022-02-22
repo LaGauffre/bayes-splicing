@@ -11,18 +11,18 @@ import scipy as sc
 
 class spliced_loss_model():
     
-    def __init__(self, f1, f2, model_type):
+    def __init__(self, f1, f2, model_type, thresh_name = 'γ', mixing_name = 'p' ):
         self.body = f1
         self.tail = f2
         self.model_type = model_type
         if model_type == "disjoint":
             self.d = f1.d + f2.d + 2 
             self.parm_names = np.append(np.append(f1.parm_names, f2.parm_names), 
-                                        np.array(['γ','p']))
+                                        np.array([thresh_name, mixing_name]))
         elif model_type == "simple" or  model_type == "continuous":
             self.d = f1.d + f2.d + 1
             self.parm_names = np.append(np.append(f1.parm_names, f2.parm_names), 
-                                        np.array(['γ']))
+                                        np.array([thresh_name]))
         self.body.set_logps(), self.tail.set_logps(), self.body.set_cdf(), self.tail.set_cdf(), self.body.set_pdf(), self.tail.set_pdf(), self.body.set_logds(), self.tail.set_logds(), self.body.set_ppf(), self.tail.set_ppf()
 
     
