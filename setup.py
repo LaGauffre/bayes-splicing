@@ -7,7 +7,7 @@ README = (HERE / "README.md").read_text()
 
 setup(
     name="bayes-splicing",
-    version="0.0.2",
+    version="0.0.3",
     description="Bayesian fit of splicing models with applications to insurance loss data",
     long_description=README,
     long_description_content_type="text/markdown",

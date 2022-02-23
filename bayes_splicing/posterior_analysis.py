@@ -59,14 +59,14 @@ def trace_plots(f, trace):
     x_labs = f.parm_names
     for k in range(len(x_labs)):
         if f.d > 1:
-            axs[k].plot(trace[trace.columns.values[k]], lw=3, label = "a posteriori", color = "blue")
+            axs[k].plot(trace[trace.columns.values[k]], lw=3, label = "a posteriori", color = '#006699')
             axs[k].set_xticks([])
             axs[k].set_yticks(np.round(
                 trace[f.parm_names[k]].quantile([0.001, 0.999]).values, 2))
             axs[k].set_xlabel(x_labs[k])
             handles, labels = axs[0].get_legend_handles_labels()
         else:
-            axs.plot(trace[trace.columns.values[k]], lw=3, label = "a posteriori", color = "blue")
+            axs.plot(trace[trace.columns.values[k]], lw=3, label = "a posteriori", color = '#006699')
             axs.set_xticks([])
             axs.set_yticks(np.round(
                 trace[f.parm_names[k]].quantile([0.001, 0.999]).values, 2))
@@ -80,7 +80,7 @@ def trace_plots(f, trace):
 def qq_plot(X, f, parms):
     y_vec = np.arange(1, len(X), 1)/len(X)
     fig, axs = plt.subplots(1, 1, figsize=(2.5, 2.5))
-    plt.plot(np.sort(X[:(len(X)-1)]),np.array([f.ppf(parms, y) for y in y_vec]), "ob")
+    plt.plot(np.sort(X[:(len(X)-1)]),np.array([f.ppf(parms, y) for y in y_vec]), "ob", color = '#006699')
     plt.plot(np.sort(X[:(len(X)-1)]),np.sort(X[:(len(X)-1)]), ":k", lw=2)
     plt.xlabel("Empirical")
     plt.ylabel("Theoretical")
