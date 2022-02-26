@@ -26,7 +26,7 @@ def posterior_plots(f, trace):
             if trace[x_labs[k]].var() > 0:
                 positions = np.linspace(min(trace[x_labs[k]]), max(trace[x_labs[k]]), 1000)
                 kernel = st.gaussian_kde(trace[x_labs[k]], bw_method = 1)
-                axs[k].plot(positions, kernel(positions), lw=3, label = "a posteriori", color = "blue")
+                axs[k].plot(positions, kernel(positions), lw=3, label = "a posteriori", color = "#006699")
                 axs[k].axvline(x=trace[x_labs[k]].mean(), label = "MAP", color='black', linestyle='dashed' )
                 axs[k].set_xticks(np.round(
                 trace[x_labs[k]].quantile([0.001, 0.999]).values, 2))
@@ -40,7 +40,7 @@ def posterior_plots(f, trace):
         else:
             positions = np.linspace(min(trace[x_labs[k]]), max(trace[x_labs[k]]), 1000)
             kernel = st.gaussian_kde(trace[x_labs[k]], bw_method = 1)
-            axs.plot(positions, kernel(positions), lw=3, label = "a posteriori", color = "blue")
+            axs.plot(positions, kernel(positions), lw=3, label = "a posteriori", color = "#006699")
             axs.axvline(x=trace[x_labs[k]].mean(), label = "MAP", color='black', linestyle='dashed' )
             axs.set_yticks([])
             axs.set_xticks(np.round(
@@ -80,7 +80,7 @@ def trace_plots(f, trace):
 def qq_plot(X, f, parms):
     y_vec = np.arange(1, len(X), 1)/len(X)
     fig, axs = plt.subplots(1, 1, figsize=(2.5, 2.5))
-    plt.plot(np.sort(X[:(len(X)-1)]),np.array([f.ppf(parms, y) for y in y_vec]), "ob", color = '#006699')
+    plt.plot(np.sort(X[:(len(X)-1)]),np.array([f.ppf(parms, y) for y in y_vec]), "o", color = '#006699')
     plt.plot(np.sort(X[:(len(X)-1)]),np.sort(X[:(len(X)-1)]), ":k", lw=2)
     plt.xlabel("Empirical")
     plt.ylabel("Theoretical")
